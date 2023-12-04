@@ -98,9 +98,6 @@ function validNumberNextToSymbol(content, notedSymbols, row, startCol) {
     currentNumber += content[row][col];
     if (validNumber === false) {
       validNumber = isNextToSymbol(row, col, content, notedSymbols);
-      if (validNumber) {
-        notedSymbols[row][col] = validNumber;
-      }
     }
     content[row] = replaceStringCharWithPeriod(content[row], col);
     col += 1;
@@ -110,15 +107,31 @@ function validNumberNextToSymbol(content, notedSymbols, row, startCol) {
     }
   }
 
-  return validNumber ? currentNumber : null;
+  if (validNumber) {
+    notedSymbols[validNumber[0]][validNumber[1]].push(currentNumber);
+  }
 }
 
-function findFinalSum(content, notedSymbols) {
-  let sum = 0;
+function findNumbers(content, notedSymbols) {
   for (let i = 0; i < content.length; i++) {
     for (let j = 0; j < content[i].length; j++) {
       if (isNumeric(content[i][j])) {
-        console.log(validNumberNextToSymbol(content, notedSymbols, i, j));
+        validNumberNextToSymbol(content, notedSymbols, i, j);
+      }
+    }
+  }
+}
+
+function calculateResult(notedSymbols, content) {
+  let sum = 0;
+  for (let i = 0; i < content.length; i++) {
+    for (let j = 0; j < content[i].length; j++) {
+      if (notedSymbols[i] != null) {
+        if (notedSymbols[i][j] != null) {
+          if (notedSymbols[i][j].length === 2) {
+            sum += notedSymbols[i][j][0] * notedSymbols[i][j][1];
+          }
+        }
       }
     }
   }
@@ -128,10 +141,12 @@ function findFinalSum(content, notedSymbols) {
 
 function main() {
   const fs = require("fs");
-  const content = fs.readFileSync("./example.txt", "utf-8").split("\r\n");
+  const content = fs.readFileSync("./input.txt", "utf-8").split("\r\n");
   const notedSymbols = {};
   findNotedSymbols(content, notedSymbols);
-  const sum = findFinalSum(content, notedSymbols);
+  findNumbers(content, notedSymbols);
+  let sum = calculateResult(notedSymbols, content);
+  console.log(sum);
 }
 
 // welp this was a fail, taking a break, and trying again later this month
