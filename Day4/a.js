@@ -112,12 +112,18 @@ function calculateScorecardCount(mapArray) {
 
 function main() {
   const fs = require("fs");
-  const content = fs.readFileSync("./input.txt", "utf-8").split("\r\n");
-  winningMapArray = modifyContent(content);
-  let part1result = calculateWins(winningMapArray)
-  console.log(part1result);
-  let part2result = calculateScorecardCount(winningMapArray);
-  console.log(part2result);
+  const content = fs.readFileSync("./example.txt", "utf-8").split("\r\n");
+  content.forEach(line => {
+    [test1, test2, test3] = line.split(/[:|]/);
+    console.log("part1 ", test1)
+    console.log("part2 ", test2)
+    console.log("part3 ", test3)
+  })
+  // winningMapArray = modifyContent(content);
+  // let part1result = calculateWins(winningMapArray)
+  // console.log(part1result);
+  // let part2result = calculateScorecardCount(winningMapArray);
+  // console.log(part2result);
 }
 
 main();
